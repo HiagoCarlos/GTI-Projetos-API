@@ -20,4 +20,5 @@ public class ProjetoResumoDTO {
     private CategoriaProjeto categoria;
     private StatusProjeto status;
     private LocalDateTime dataCriacao;
+    private LocalDateTime dataAtualizacao;
 }

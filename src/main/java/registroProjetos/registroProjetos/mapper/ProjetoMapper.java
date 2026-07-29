@@ -27,18 +27,18 @@ public class ProjetoMapper {
                 .dataAtualizacao(projeto.getDataAtualizacao())
                 .build();
     }
-
-    public ProjetoResumoDTO toResumoDTO(Projeto projeto) {
-        if (projeto == null) {
-            return null;
-        }
-        return ProjetoResumoDTO.builder()
-                .id(projeto.getId())
-                .titulo(projeto.getTitulo())
-                .responsavelNome(projeto.getResponsavel() != null ? projeto.getResponsavel().getNome() : null)
-                .categoria(projeto.getCategoria())
-                .status(projeto.getStatus())
-                .dataCriacao(projeto.getDataCriacao())
-                .build();
+public ProjetoResumoDTO toResumoDTO(Projeto projeto) {
+    if (projeto == null) {
+        return null;
     }
+    return ProjetoResumoDTO.builder()
+            .id(projeto.getId())
+            .titulo(projeto.getTitulo())
+            .responsavelNome(projeto.getResponsavel() != null ? projeto.getResponsavel().getNome() : null)
+            .categoria(projeto.getCategoria())
+            .status(projeto.getStatus())
+            .dataCriacao(projeto.getDataCriacao())
+            .dataAtualizacao(projeto.getDataAtualizacao())
+            .build();
+}
 }

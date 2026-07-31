@@ -7,6 +7,8 @@ import registroProjetos.registroProjetos.exception.ResourceNotFoundException;
 import registroProjetos.registroProjetos.mapper.ResponsavelMapper;
 import registroProjetos.registroProjetos.repository.ResponsavelRepository;
 import lombok.RequiredArgsConstructor;
+
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -19,17 +21,9 @@ public class ResponsavelServiceImpl implements ResponsavelService {
 
     private final ResponsavelRepository responsavelRepository;
     private final ResponsavelMapper responsavelMapper;
+    private final PasswordEncoder passwordEncoder;
 
-    @Override
-    public ResponsavelResumoDTO criar(ResponsavelRequestDTO dto) {
-        Responsavel responsavel = Responsavel.builder()
-                .nome(dto.getNome())
-                .email(dto.getEmail())
-                .build();
-
-        Responsavel salvo = responsavelRepository.save(responsavel);
-        return responsavelMapper.toResumoDTO(salvo);
-    }
+    
 
     @Override
     @Transactional(readOnly = true)
@@ -67,4 +61,18 @@ public class ResponsavelServiceImpl implements ResponsavelService {
                 .orElseThrow(() -> new ResourceNotFoundException(
                         "Responsável não encontrado com id: " + id));
     }
+
+    @Override
+public ResponsavelResumoDTO criar(ResponsavelRequestDTO dto) {
+    Responsavel responsavel = Responsavel.builder()
+            .nome(dto.getNome())
+            .email(dto.getEmail())
+            .cargo(dto.getCargo())
+            .login(dto.getLogin())
+            .senha(dto.getSenha() != null ? passwordEncoder.encode(dto.getSenha()) : null)
+            .build();
+
+    Responsavel salvo = responsavelRepository.save(responsavel);
+    return responsavelMapper.toResumoDTO(salvo);
+}
 }

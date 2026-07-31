@@ -34,6 +34,7 @@ public ProjetoResumoDTO toResumoDTO(Projeto projeto) {
     return ProjetoResumoDTO.builder()
             .id(projeto.getId())
             .titulo(projeto.getTitulo())
+            .descricao(projeto.getDescricao())
             .responsavelNome(projeto.getResponsavel() != null ? projeto.getResponsavel().getNome() : null)
             .categoria(projeto.getCategoria())
             .status(projeto.getStatus())

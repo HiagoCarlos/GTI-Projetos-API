@@ -8,12 +8,13 @@ import org.springframework.stereotype.Component;
 public class ResponsavelMapper {
 
     public ResponsavelResumoDTO toResumoDTO(Responsavel responsavel) {
-        if (responsavel == null) {
-            return null;
-        }
-        return ResponsavelResumoDTO.builder()
-                .id(responsavel.getId())
-                .nome(responsavel.getNome())
-                .build();
+    if (responsavel == null) {
+        return null;
     }
+    return ResponsavelResumoDTO.builder()
+            .id(responsavel.getId())
+            .nome(responsavel.getNome())
+            .cargo(responsavel.getCargo())
+            .build();
+}
 }

@@ -16,6 +16,7 @@ import java.time.LocalDateTime;
 public class ProjetoResumoDTO {
     private Long id;
     private String titulo;
+    private String descricao;
     private String responsavelNome;
     private CategoriaProjeto categoria;
     private StatusProjeto status;

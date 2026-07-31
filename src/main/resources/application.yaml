@@ -10,6 +10,9 @@ spring:
   config:
     activate:
       on-profile: dev
+  jwt:
+    secret: ${JWT_SECRET:AKHNBAJBFHABFHABFHABFH756743764gsgAFDGFADGAHDFVB**¨&¨%¨%$%$#$%#$&*¨*&((*)(_)(*gGAFHAGBFHYAHFG))}
+    expiration-ms: 28800000
 
   datasource:
     url: jdbc:h2:mem:gtidb
@@ -32,6 +35,9 @@ spring:
 
 server:
   port: 8080
+  jwt:
+    secret: ${JWT_SECRET:AKHNBAJBFHABFHABFHABFH756743764gsgAFDGFADGAHDFVB**¨&¨%¨%$%$#$%#$&*¨*&((*)(_)(*gGAFHAGBFHYAHFG))}
+    expiration-ms: 28800000
 
 app:
   cors:
@@ -42,6 +48,9 @@ spring:
   config:
     activate:
       on-profile: prod
+  jwt:
+    secret: ${JWT_SECRET:AKHNBAJBFHABFHABFHABFH756743764gsgAFDGFADGAHDFVB**¨&¨%¨%$%$#$%#$&*¨*&((*)(_)(*gGAFHAGBFHYAHFG))}
+    expiration-ms: 28800000
 
   datasource:
     url: jdbc:postgresql://${DB_HOST:localhost}:${DB_PORT:5432}/${DB_NAME:gtidb}
@@ -56,7 +65,13 @@ spring:
 
 server:
   port: ${PORT:8080}
+  jwt:
+    secret: ${JWT_SECRET:AKHNBAJBFHABFHABFHABFH756743764gsgAFDGFADGAHDFVB**¨&¨%¨%$%$#$%#$&*¨*&((*)(_)(*gGAFHAGBFHYAHFG))}
+    expiration-ms: 28800000
 
 app:
   cors:
     allowed-origins: ${FRONTEND_URL:https://seu-dominio.com}
+  jwt:
+    secret: ${JWT_SECRET:AKHNBAJBFHABFHABFHABFH756743764gsgAFDGFADGAHDFVB**¨&¨%¨%$%$#$%#$&*¨*&((*)(_)(*gGAFHAGBFHYAHFG))}
+    expiration-ms: 28800000

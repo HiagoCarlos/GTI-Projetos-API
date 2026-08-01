@@ -6,6 +6,7 @@ import registroProjetos.registroProjetos.entity.Responsavel;
 import registroProjetos.registroProjetos.exception.CredenciaisInvalidasException;
 import registroProjetos.registroProjetos.repository.ResponsavelRepository;
 import registroProjetos.registroProjetos.security.JwtService;
+import registroProjetos.registroProjetos.security.TentativaLoginService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -20,17 +21,22 @@ public class AuthController {
     private final ResponsavelRepository responsavelRepository;
     private final PasswordEncoder passwordEncoder;
     private final JwtService jwtService;
+    private final TentativaLoginService tentativaLoginService;
 
     @PostMapping("/login")
     public ResponseEntity<LoginResponseDTO> login(@Valid @RequestBody LoginRequestDTO dto) {
-        Responsavel responsavel = responsavelRepository.findByLogin(dto.getLogin())
-                .orElseThrow(() -> new CredenciaisInvalidasException("Login ou senha inválidos"));
+        String login = dto.getLogin().trim().toLowerCase();
+        tentativaLoginService.validarNaoBloqueado(login);
 
-        if (responsavel.getSenha() == null
+        Responsavel responsavel = responsavelRepository.findByLoginAndAtivoTrue(login).orElse(null);
+
+        if (responsavel == null || responsavel.getSenha() == null
                 || !passwordEncoder.matches(dto.getSenha(), responsavel.getSenha())) {
+            tentativaLoginService.registrarFalha(login);
             throw new CredenciaisInvalidasException("Login ou senha inválidos");
         }
 
+        tentativaLoginService.registrarSucesso(login);
         String token = jwtService.gerarToken(responsavel.getLogin(), responsavel.getCargo().name());
 
         return ResponseEntity.ok(LoginResponseDTO.builder()

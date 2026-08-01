@@ -30,5 +30,12 @@ public class Responsavel {
     private String login;
 
     @Column(length = 100)
-    private String senha; 
+    private String senha;
+
+    @Column(nullable = false)
+    @Builder.Default
+    private Boolean ativo = true;
+
+    @Version
+    private Long versao;
 }

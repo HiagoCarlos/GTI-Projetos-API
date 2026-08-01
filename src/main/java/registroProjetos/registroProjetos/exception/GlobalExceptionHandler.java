@@ -37,6 +37,30 @@ public class GlobalExceptionHandler {
         ErroResponse erro = new ErroResponse(HttpStatus.UNAUTHORIZED.value(), ex.getMessage(), LocalDateTime.now());
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(erro);
     }
+    @ExceptionHandler(RegraNegocioException.class)
+public ResponseEntity<ErroResponse> handleRegraNegocio(RegraNegocioException ex) {
+    ErroResponse erro = new ErroResponse(HttpStatus.CONFLICT.value(), ex.getMessage(), LocalDateTime.now());
+    return ResponseEntity.status(HttpStatus.CONFLICT).body(erro);
+}
 
+@ExceptionHandler(org.springframework.dao.DataIntegrityViolationException.class)
+public ResponseEntity<ErroResponse> handleIntegridade(org.springframework.dao.DataIntegrityViolationException ex) {
+    ErroResponse erro = new ErroResponse(
+            HttpStatus.CONFLICT.value(),
+            "Operação viola uma restrição de integridade dos dados (registro em uso ou duplicado)",
+            LocalDateTime.now()
+    );
+    return ResponseEntity.status(HttpStatus.CONFLICT).body(erro);
+}
+
+@ExceptionHandler(Exception.class)
+public ResponseEntity<ErroResponse> handleGenerico(Exception ex) {
+    ErroResponse erro = new ErroResponse(
+            HttpStatus.INTERNAL_SERVER_ERROR.value(),
+            "Erro interno inesperado",
+            LocalDateTime.now()
+    );
+    return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(erro);
+}
     public record ErroResponse(int status, String mensagem, LocalDateTime timestamp) {}
 }

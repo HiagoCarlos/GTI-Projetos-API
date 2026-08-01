@@ -1,6 +1,6 @@
 package registroProjetos.registroProjetos.security;
 
-import io.jsonwebtoken.Claims;
+import registroProjetos.registroProjetos.repository.ResponsavelRepository;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -21,6 +21,7 @@ import java.util.List;
 public class JwtAuthFilter extends OncePerRequestFilter {
 
     private final JwtService jwtService;
+    private final ResponsavelRepository responsavelRepository;
 
     @Override
     protected void doFilterInternal(
@@ -35,14 +36,18 @@ public class JwtAuthFilter extends OncePerRequestFilter {
             String token = header.substring(7);
 
             if (jwtService.tokenValido(token)) {
-                Claims claims = jwtService.extrairClaims(token);
-                String login = claims.getSubject();
-                String cargo = claims.get("cargo", String.class);
+                String login = jwtService.extrairClaims(token).getSubject();
 
-                var authToken = new UsernamePasswordAuthenticationToken(
-                        login, null, List.of(new SimpleGrantedAuthority("ROLE_" + cargo))
-                );
-                SecurityContextHolder.getContext().setAuthentication(authToken);
+                // Cargo e status "ativo" vêm do banco, não do token -- se o usuário
+                // foi excluído ou teve o cargo alterado, isso reflete na próxima
+                // requisição, mesmo com o token ainda dentro da validade.
+                responsavelRepository.findByLoginAndAtivoTrue(login).ifPresent(responsavel -> {
+                    var authToken = new UsernamePasswordAuthenticationToken(
+                            login, null,
+                            List.of(new SimpleGrantedAuthority("ROLE_" + responsavel.getCargo().name()))
+                    );
+                    SecurityContextHolder.getContext().setAuthentication(authToken);
+                });
             }
         }
 

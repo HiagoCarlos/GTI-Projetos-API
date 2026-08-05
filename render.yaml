@@ -1,0 +1,38 @@
+databases:
+  - name: gtidb
+    plan: free
+    databaseName: gtidb
+    user: gtiuser
+
+services:
+  - type: web
+    name: registro-projetos-backend
+    env: docker
+    plan: free
+    dockerfilePath: ./Dockerfile
+    envVars:
+      - key: SPRING_PROFILES_ACTIVE
+        value: prod
+      - key: DB_HOST
+        fromDatabase:
+          name: gtidb
+          property: host
+      - key: DB_PORT
+        fromDatabase:
+          name: gtidb
+          property: port
+      - key: DB_NAME
+        fromDatabase:
+          name: gtidb
+          property: database
+      - key: DB_USER
+        fromDatabase:
+          name: gtidb
+          property: user
+      - key: DB_PASSWORD
+        fromDatabase:
+          name: gtidb
+          property: password
+      # troque pela URL real depois que a Vercel gerar o domínio do front
+      - key: FRONTEND_URL
+        value: https://SEU-APP.vercel.app

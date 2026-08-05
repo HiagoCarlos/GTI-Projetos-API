@@ -33,6 +33,6 @@ services:
         fromDatabase:
           name: gtidb
           property: password
-      # troque pela URL real depois que a Vercel gerar o domínio do front
+     
       - key: FRONTEND_URL
         value: https://gti-projetos.vercel.app
